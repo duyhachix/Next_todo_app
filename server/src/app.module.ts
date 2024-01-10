@@ -1,6 +1,7 @@
 // standard libraries
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 // external libraries
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,6 +11,11 @@ import { TodosModule } from './todos/todos.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      ignoreEnvFile: true,
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
