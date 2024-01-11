@@ -1,6 +1,6 @@
 import { Controller, Body, Get, Post, ConflictException } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { Users } from './users.entity';
+import { Users } from '../database/entity/users.entity';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 
 @Controller('users')
@@ -37,5 +37,19 @@ export class UsersController {
       }
       return 'Error creating user';
     }
+  }
+
+  /**
+   * TODO: login user
+   * @param loginInfos: login information
+   * @returns
+   */
+  @Post('signin')
+  async signin(@Body() loginInfos: { email: string; password: string }) {
+    const content = await this.usersService.signin(
+      loginInfos.email,
+      loginInfos.password,
+    );
+    return content;
   }
 }

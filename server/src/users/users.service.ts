@@ -5,7 +5,7 @@ import { Repository, FindOneOptions } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 // internal libraries
-import { Users } from './users.entity';
+import { Users } from '../database/entity/users.entity';
 import { CreateUserParams } from '../utils/types';
 
 @Injectable()
@@ -45,5 +45,31 @@ export class UsersService {
     newUser.password = hassPassword;
 
     return await this.usersRepository.save(newUser);
+  }
+
+  /**
+   * TODO: login user
+   * @param email : login email
+   * @param password : login password
+   * @returns logged in user info
+   */
+  async signin(email: string, password: string) {
+    try {
+      const user = await this.usersRepository.findOne({
+        where: { email: email },
+        select: { email: true, password: true, username: true },
+      });
+
+      if (!user) {
+        return 'Email or password is incorrect';
+      }
+      // compare hash password vs plain password
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) return 'Email or password is incorrect';
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
