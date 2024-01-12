@@ -77,4 +77,8 @@ export class UsersService {
       console.log(error);
     }
   }
+
+  async getUserById(id: number) {
+    return await this.usersRepository.findOne({ where: { id: id } });
+  }
 }
