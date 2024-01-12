@@ -1,5 +1,9 @@
 // standard libraries
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOneOptions } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -61,12 +65,13 @@ export class UsersService {
       });
 
       if (!user) {
-        return 'Email or password is incorrect';
+        throw new BadRequestException('Email or password is incorrect');
       }
       // compare hash password vs plain password
       const isMatch = await bcrypt.compare(password, user.password);
 
-      if (!isMatch) return 'Email or password is incorrect';
+      if (!isMatch)
+        throw new BadRequestException('Email or password is incorrect');
       return user;
     } catch (error) {
       console.log(error);
