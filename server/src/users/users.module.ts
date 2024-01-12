@@ -27,7 +27,17 @@ export class UserModule implements NestModule {
         ValidateUserMiddleware,
         // ValidateUserAccount,
       )
-      .exclude({ path: 'users', method: RequestMethod.GET }) // exclude "/user" route out of the middleware
+      .exclude(
+        { path: 'users', method: RequestMethod.GET },
+        {
+          path: 'users/:id',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'users/search/:id',
+          method: RequestMethod.GET,
+        },
+      ) // exclude "/user" route out of the middleware
       .forRoutes(UsersController);
   }
 }
