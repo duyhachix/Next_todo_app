@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+
 // internal libraries
 import { Users } from '../database/entity/users.entity';
 
@@ -46,5 +47,20 @@ export class AuthService {
     } catch (error) {
       return error.message;
     }
+  }
+
+  // example how to use token
+  async getUsers(token: string) {
+    if (!this.isValidToken(token)) {
+      throw new Error('Invalid token');
+    }
+    return await this.usersRepository.find();
+  }
+
+  private isValidToken(token: string): boolean {
+    // check if token is valid
+    console.log('token', token);
+
+    return true;
   }
 }

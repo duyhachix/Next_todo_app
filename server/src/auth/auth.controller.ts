@@ -1,6 +1,15 @@
-import { Controller, Body, HttpStatus, Post, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  HttpStatus,
+  Post,
+  Req,
+  Get,
+  HttpCode,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-// import { SignInDto } from './dtos/SignInDto';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -14,9 +23,27 @@ export class AuthController {
         signInDto.email,
         signInDto.password,
       );
-      console.log('auth user', authUser);
+      console.log('authUser', authUser);
+
+      if (!authUser) {
+        return { message: 'Email or password is incorrect' };
+      }
 
       return { authUser, message: 'You have been successfully signed in' };
-    } catch (err) {}
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('users')
+  async getUsers(@Req() req: any) {
+    // get token from headers
+    const token = req.headers['authorization'];
+    console.log('token', token);
+
+    const users = await this.authService.getUsers(token);
+
+    return users;
   }
 }
