@@ -70,7 +70,6 @@ export class UsersService {
       if (result.affected === 0) {
         throw new Error('There no updates');
       }
-      console.log(this.usersRepository.findOne({ email: email }));
 
       return result;
     } catch (err) {
