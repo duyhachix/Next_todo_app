@@ -19,20 +19,24 @@ export class TodosService {
 
   async create(user: Users, newTodoItem: any) {
     const userdetail = await this.usersService.getUserByEmail(user.email);
-
     const userId = userdetail.id;
     const todo = this.todoRepository.create({
       ...newTodoItem,
       userId,
     });
-    console.log('todo', todo);
 
     return this.todoRepository.save(todo);
   }
 
-  // async findAll(username: string) {
-  //   // return this.todoRepository.find({ username });
-  // }
+  async getAllTodobyUser(user: Users) {
+    const userdetail = await this.usersService.getUserByEmail(user.email);
+    const userId = userdetail.id;
+
+    const todoListthis = await this.todoRepository.find({
+      where: { userId: userId },
+    });
+    return todoListthis;
+  }
 
   // async delete(username: string, todoId: number) {
   //   const todo = await this.todoRepository.findOne({ id: todoId, username });

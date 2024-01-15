@@ -34,15 +34,25 @@ export class TodosController {
     @User() user: Users,
   ) {
     const reponse = this.todosService.create(user, createTodoDto);
-    return reponse;
+    return {
+      message: 'Create todo successfully',
+      data: reponse,
+    };
   }
 
   @Get()
   @ApiBearerAuth()
-  async findAll(@Req() req: Request) {
-    const { user } = req;
-    console.log('find all todo', user);
-    // return this.todosService.findAll(user.username);
+  async findAll(@Req() req: Request, @User() user: Users) {
+    const response = await this.todosService.getAllTodobyUser(user);
+    if (response.length === 0)
+      return {
+        message: 'List empty',
+        data: response,
+      };
+    return {
+      message: 'Get all todos list successfully',
+      data: response,
+    };
   }
 
   // @Delete(':id')
