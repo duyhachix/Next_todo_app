@@ -10,12 +10,15 @@ import {
   HttpCode,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 // internal libraries
 import { AuthService } from './auth.service';
 import { AuthenticationGuard } from './guard/authentication.guard';
-import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { SignInDto } from './dtos/SignInDto';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -24,18 +27,14 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @Post('signin')
-  async signin(
-    @Body() signInDto: { email: string; password: string },
-    @Request() req: Request,
-  ) {
-    console.log('req', req.headers);
+  async signin(@Body() signInDto: SignInDto, @Request() req: Request) {
+    console.log('req sign in headers', req.headers);
 
     try {
       const authUser = await this.authService.signIn(
         signInDto.email,
         signInDto.password,
       );
-      console.log('authUser', authUser);
 
       if (!authUser) {
         return { message: 'Email or password is incorrect' };

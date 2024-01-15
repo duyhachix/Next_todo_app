@@ -87,4 +87,20 @@ export class AuthService {
 
     return user;
   }
+
+  public async decodeToken(token: string): Promise<{
+    email: string;
+    sub: string;
+  }> {
+    const _token = token.replace('Bearer ', '');
+    return this.jwtService.decode(_token);
+  }
+
+  public async getUser(email: string): Promise<Users> {
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+    });
+
+    return user;
+  }
 }

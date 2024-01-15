@@ -20,7 +20,7 @@ import { jwtConfig } from 'src/config/jwt_config';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtService, LocalStrategy],
-  exports: [TypeOrmModule],
+  exports: [AuthService],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
