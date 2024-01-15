@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Users } from './users.entity';
 
 @Entity()
 export class Todos {
@@ -19,4 +26,14 @@ export class Todos {
     nullable: false,
   })
   status: string;
+
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  userId: number;
+
+  @ManyToOne(() => Users, (users) => users.todos)
+  @JoinColumn({ name: 'userId' })
+  users: Users;
 }

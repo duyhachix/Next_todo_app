@@ -1,4 +1,11 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Todos } from './todos.entity';
 
 @Entity()
 export class Users {
@@ -9,7 +16,7 @@ export class Users {
     nullable: false,
     unique: true,
   })
-  @Index()
+  // @Index()
   email: string;
 
   @Column({
@@ -22,4 +29,7 @@ export class Users {
     nullable: false,
   })
   username: string;
+
+  @OneToMany(() => Todos, (todos) => todos.users)
+  todos: Todos[];
 }
