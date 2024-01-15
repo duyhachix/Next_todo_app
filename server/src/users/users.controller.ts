@@ -10,15 +10,26 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  UseGuards,
+  Put,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
 import { UsersService } from './users.service';
 import { Users } from '../database/entity/users.entity';
 import { CreateUserDto } from './dtos/CreateUser.dto';
+import { UpdateUserDto } from './dtos/UpdateUser.dto';
+import { AuthenticationGuard } from 'src/auth/guard/authentication.guard';
+import { AuthService } from 'src/auth/auth.service';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   @Get('')
   async getAllUser(): Promise<Users[]> {
@@ -52,6 +63,48 @@ export class UsersController {
     }
   }
 
+  /**
+   * Get user info by token
+   * @param req: Request object
+   * @returns User information
+   */
+  @UseGuards(AuthenticationGuard)
+  @Get('profile')
+  @ApiBearerAuth()
+  async getUsetByToken(@Req() req: Request) {
+    const token = req.headers['authorization'];
+    console.log('getUsers`s token', token);
+    const userJWT = await this.authService.decodeToken(token);
+    console.log('--------', userJWT);
+
+    return req['user'];
+  }
+
+  @UseGuards(AuthenticationGuard)
+  @Put('update')
+  @ApiBearerAuth()
+  async updateUser(@Req() req: Request, @Body() UpdateUserDto: UpdateUserDto) {
+    const token = req.headers['authorization'];
+    const userJWT = await this.authService.decodeToken(token);
+
+    const old_user = await this.usersService.getUserByEmail(userJWT.email);
+
+    const updateInfo = {
+      ...old_user,
+      ...UpdateUserDto,
+    };
+
+    const response = await this.usersService.updateUser(
+      old_user.email,
+      updateInfo,
+    );
+
+    return {
+      message: 'Update user successfully',
+      response,
+    };
+  }
+
   // DO by express way: use Req/Res
   // if use res.sen() --> so cannot use return
   @Get(':id')
@@ -79,6 +132,4 @@ export class UsersController {
     if (user) return user;
     else throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
   }
-
-  // get users serialized (without email)
 }

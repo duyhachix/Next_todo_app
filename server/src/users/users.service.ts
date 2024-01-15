@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 
 // internal libraries
 import { Users } from '../database/entity/users.entity';
-import { CreateUserParams } from '../utils/types';
+import { CreateUserParams, UpdateUserParams } from '../utils/types';
 
 @Injectable()
 export class UsersService {
@@ -51,5 +51,30 @@ export class UsersService {
 
   async getUserById(id: number) {
     return await this.usersRepository.findOne({ where: { id: id } });
+  }
+
+  async getUserByEmail(email: string) {
+    console.log(email);
+
+    return await this.usersRepository.findOne({ where: { email: email } });
+  }
+
+  async updateUser(email: string, updateUserDetails: UpdateUserParams) {
+    try {
+      const result = await this.usersRepository.update(
+        { email: email },
+        {
+          ...updateUserDetails,
+        },
+      );
+      if (result.affected === 0) {
+        throw new Error('There no updates');
+      }
+      console.log(this.usersRepository.findOne({ email: email }));
+
+      return result;
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

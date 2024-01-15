@@ -15,12 +15,14 @@ import { ValidateUserMiddleware } from '../users/midllewares/validate-user.middl
 // import { ValidateUserAccount } from './midllewares/validate-user-account.middleware'; // for the test purpose
 import { ConfigModule } from '@nestjs/config';
 import { jwtConfig } from 'src/config/jwt_config';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Users]),
     ConfigModule.forRoot(),
     JwtModule.register(jwtConfig),
+    AuthModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, JwtService],
@@ -36,6 +38,7 @@ export class UserModule implements NestModule {
       )
       .exclude(
         { path: 'users', method: RequestMethod.GET },
+        { path: 'users/update', method: RequestMethod.PUT },
         {
           path: 'users/:id',
           method: RequestMethod.GET,
