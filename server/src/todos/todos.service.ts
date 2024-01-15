@@ -45,7 +45,6 @@ export class TodosService {
     const todo = await this.todoRepository.findOne({
       where: { userId: userId, id: id },
     });
-    console.log('todo', todo);
 
     if (!todo) {
       throw new Error('Todo not found');
@@ -58,11 +57,18 @@ export class TodosService {
     return await this.todoRepository.save(todo);
   }
 
-  // async delete(username: string, todoId: number) {
-  //   const todo = await this.todoRepository.findOne({ id: todoId, username });
-  //   if (!todo) {
-  //     throw new Error('Todo not found');
-  //   }
-  //   return this.todoRepository.remove(todo);
-  // }
+  async delete(user: Users, id: number) {
+    const userdetail = await this.usersService.getUserByEmail(user.email);
+    const userId = userdetail.id;
+
+    const todo = await this.todoRepository.findOne({
+      where: { userId: userId, id: id },
+    });
+
+    if (!todo) {
+      throw new Error('Todo not found');
+    }
+
+    return await this.todoRepository.delete(todo);
+  }
 }

@@ -4,7 +4,7 @@ import {
   Post,
   Put,
   Param,
-  // Delete,
+  Delete,
   Body,
   Req,
   UseGuards,
@@ -81,10 +81,19 @@ export class TodosController {
       data: response,
     };
   }
+  @ApiBearerAuth()
+  @Delete(':id')
+  async delete(
+    @Req() req: Request,
+    @User() user: Users,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const response = await this.todosService.delete(user, id);
+    console.log('response', response);
 
-  // @Delete(':id')
-  // async delete(@Req() req: Request, @Param('id') todoId: number) {
-  //   const { user } = req;
-  //   return this.todosService.delete(user.id, todoId);
-  // }
+    return {
+      message: 'Delete todo successfully',
+      data: response,
+    };
+  }
 }
