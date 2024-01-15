@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserDto {
   @ApiProperty()
-  username: string;
+  email: string;
 
   @ApiProperty()
-  password: string;
+  username: string;
 }
