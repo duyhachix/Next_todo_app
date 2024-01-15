@@ -56,11 +56,35 @@ export class AuthService {
     }
     return await this.usersRepository.find();
   }
-
+  // check if token is valid
   private isValidToken(token: string): boolean {
     // check if token is valid
-    console.log('token', token);
+
+    // // check token existing
+    console.log(token ? 'have token' : 'not have token');
+    if (!token) {
+      return false;
+    }
+    // // check token type is valid
+    const tokenPart = token.split(' ');
+    console.log(
+      tokenPart[0] === 'Bearer'
+        ? 'Token type is Bearer'
+        : 'Token type is not Bearer',
+    );
+    if (tokenPart.length !== 2 || tokenPart[0] !== 'Bearer') {
+      return false;
+    }
+    // // check token expiration
 
     return true;
+  }
+
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+    });
+
+    return user;
   }
 }
