@@ -52,20 +52,6 @@ export class UsersController {
     }
   }
 
-  /**
-   * TODO: login user
-   * @param loginInfos: login information
-   * @returns
-   */
-  @Post('signin')
-  async signin(@Body() loginInfos: { email: string; password: string }) {
-    const content = await this.usersService.signin(
-      loginInfos.email,
-      loginInfos.password,
-    );
-    return content;
-  }
-
   // DO by express way: use Req/Res
   // if use res.sen() --> so cannot use return
   @Get(':id')

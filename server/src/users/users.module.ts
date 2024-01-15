@@ -6,17 +6,24 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 // internal libraries
 import { UsersService } from './users.service';
 import { Users } from '../database/entity/users.entity';
 import { UsersController } from './users.controller';
 import { ValidateUserMiddleware } from '../users/midllewares/validate-user.middleware';
 // import { ValidateUserAccount } from './midllewares/validate-user-account.middleware'; // for the test purpose
+import { ConfigModule } from '@nestjs/config';
+import { jwtConfig } from 'src/config/jwt_config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users])],
+  imports: [
+    TypeOrmModule.forFeature([Users]),
+    ConfigModule.forRoot(),
+    JwtModule.register(jwtConfig),
+  ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, JwtService],
   exports: [TypeOrmModule, UsersService],
 })
 export class UserModule implements NestModule {
