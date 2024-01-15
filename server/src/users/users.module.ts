@@ -37,6 +37,7 @@ export class UserModule implements NestModule {
         // ValidateUserAccount,
       )
       .exclude(
+        { path: 'users/signup', method: RequestMethod.POST },
         { path: 'users', method: RequestMethod.GET },
         { path: 'users/update', method: RequestMethod.PUT },
         {

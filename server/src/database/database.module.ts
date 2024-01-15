@@ -11,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       port: 3306,
       username: 'root',
       password: '12345678',
-      database: 'todo_app',
+      database: 'todo',
       entities: [__dirname + '/**/entity/*.entity{.ts,.js}'],
       synchronize: true,
       logging: true,
