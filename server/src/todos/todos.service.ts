@@ -29,11 +29,12 @@ export class TodosService {
   }
 
   async getAllTodobyUser(user: Users) {
-    const userdetail = await this.usersService.getUserByEmail(user.email);
-    const userId = userdetail.id;
+    // const userdetail = await this.usersService.getUserByEmail(user.email);
+    // const userId = userdetail.id;
 
     const todoListthis = await this.todoRepository.find({
-      where: { userId: userId },
+      where: { userId: user.id },
+      relations: { users: true },
     });
     return todoListthis;
   }
@@ -50,11 +51,14 @@ export class TodosService {
       throw new Error('Todo not found');
     }
     // update new value
-    todo.title = updateTodoDto.title;
-    todo.description = updateTodoDto.description;
-    todo.status = updateTodoDto.status;
+    // todo.title = updateTodoDto.title;
+    // todo.description = updateTodoDto.description;
+    // todo.status = updateTodoDto.status;
 
-    return await this.todoRepository.save(todo);
+    return await this.todoRepository.save({
+      ...todo,
+      ...updateTodoDto,
+    });
   }
 
   async delete(user: Users, id: number) {
@@ -69,6 +73,6 @@ export class TodosService {
       throw new Error('Todo not found');
     }
 
-    return await this.todoRepository.delete(todo);
+    return await this.todoRepository.delete({ id: id });
   }
 }
