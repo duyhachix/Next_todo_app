@@ -5,7 +5,6 @@ import {
   HttpStatus,
   Post,
   Req,
-  Request,
   Get,
   HttpCode,
   UseGuards,
@@ -27,9 +26,7 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @Post('signin')
-  async signin(@Body() signInDto: SignInDto, @Request() req: Request) {
-    console.log('req sign in headers', req.headers);
-
+  async signin(@Body() signInDto: SignInDto) {
     try {
       const authUser = await this.authService.signIn(
         signInDto.email,
