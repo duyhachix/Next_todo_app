@@ -1,5 +1,5 @@
 // standard libraries
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -48,7 +48,7 @@ export class TodosService {
     });
 
     if (!todo) {
-      throw new Error('Todo not found');
+      throw new NotFoundException('Todo not found');
     }
     // update new value
     // todo.title = updateTodoDto.title;
@@ -70,7 +70,7 @@ export class TodosService {
     });
 
     if (!todo) {
-      throw new Error('Todo not found');
+      throw new NotFoundException('Can not found item');
     }
 
     return await this.todoRepository.delete({ id: id });
