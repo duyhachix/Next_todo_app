@@ -47,7 +47,7 @@ export class TodosService {
     });
 
     if (!todo) {
-      throw new Error('Todo not found');
+      throw new NotFoundException('Todo not found');
     }
     // update new value
     todo.title = updateTodoDto.title;
