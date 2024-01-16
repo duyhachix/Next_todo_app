@@ -10,6 +10,6 @@ export class UpdateTodoDto {
   @ApiProperty()
   status: string;
 
-  @ApiProperty()
+  // @ApiProperty()
   userId: string;
 }
