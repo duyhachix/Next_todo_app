@@ -5,7 +5,6 @@ import {
   HttpStatus,
   Post,
   Req,
-  Request,
   Get,
   HttpCode,
   UseGuards,
@@ -27,8 +26,21 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @Post('signin')
-  async signin(@Body() signInDto: SignInDto, @Request() req: Request) {
-    return await this.authService.signIn(signInDto.email, signInDto.password);
+  async signin(@Body() signInDto: SignInDto) {
+    try {
+      const authUser = await this.authService.signIn(
+        signInDto.email,
+        signInDto.password,
+      );
+
+      if (!authUser) {
+        return { message: 'Email or password is incorrect' };
+      }
+
+      return { authUser, message: 'You have been successfully signed in' };
+    } catch (err) {
+      return err.message;
+    }
   }
 
   @UseGuards(AuthenticationGuard)
