@@ -80,7 +80,7 @@ export class AuthService {
     return true;
   }
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  async validateUser(email: string): Promise<any> {
     const user = await this.usersRepository.findOne({
       where: { email: email },
     });
