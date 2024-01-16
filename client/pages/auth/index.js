@@ -1,11 +1,13 @@
 'use client';
+import '../../app/globals.css';
+
 import { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
-	// state
 	const [user, setUser] = useState(null);
 	const [isLoginForm, setIsLoginForm] = useState(true);
 	const [email, setEmail] = useState('');
@@ -13,6 +15,8 @@ export default function Home() {
 	const [newEmail, setNewEmail] = useState('');
 	const [newUsername, setNewUsername] = useState('');
 	const [newPassword, setNewPassword] = useState('');
+
+	const router = useRouter();
 
 	async function handleLogin(e) {
 		e.preventDefault();
@@ -41,6 +45,11 @@ export default function Home() {
 				});
 				setEmail('');
 				setPassword('');
+
+				router.push({
+					pathname: '/todo',
+					query: { user: JSON.stringify(user) },
+				});
 			}
 		} catch (error) {
 			console.log(error);
@@ -71,6 +80,7 @@ export default function Home() {
 					progress: undefined,
 					theme: 'light',
 				});
+				setIsLoginForm(true);
 			}
 		} catch (error) {
 			console.log(error);
@@ -79,7 +89,7 @@ export default function Home() {
 	}
 
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-between p-24">
+		<main className="flex min-h-screen flex-col items-center justify-between p-10">
 			{isLoginForm ? (
 				// login form
 				<div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

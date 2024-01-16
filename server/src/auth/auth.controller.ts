@@ -28,22 +28,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('signin')
   async signin(@Body() signInDto: SignInDto, @Request() req: Request) {
-    console.log('req sign in headers', req.headers);
-
-    try {
-      const authUser = await this.authService.signIn(
-        signInDto.email,
-        signInDto.password,
-      );
-
-      if (!authUser) {
-        return { message: 'Email or password is incorrect' };
-      }
-
-      return { authUser, message: 'You have been successfully signed in' };
-    } catch (err) {
-      return err.message;
-    }
+    return await this.authService.signIn(signInDto.email, signInDto.password);
   }
 
   @UseGuards(AuthenticationGuard)
