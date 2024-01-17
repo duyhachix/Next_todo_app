@@ -30,7 +30,10 @@ export default function Home() {
 				`http://localhost:8080/auth/signin`,
 				loginInfo
 			);
-			if (response.status === 200) {
+			console.log('response', response);
+			let loggedUser = response.data.authUser;
+			if (!loggedUser) return;
+			else {
 				let user = response.data.authUser;
 				setUser(user);
 				toast.success(response.data?.message, {

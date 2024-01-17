@@ -32,9 +32,10 @@ export class AuthController {
         signInDto.email,
         signInDto.password,
       );
+      console.log('authUser', authUser);
 
       if (!authUser) {
-        return { message: 'Email or password is incorrect' };
+        throw new Error('Email or password is incorrect');
       }
 
       return { authUser, message: 'You have been successfully signed in' };
