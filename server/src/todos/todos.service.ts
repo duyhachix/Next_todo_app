@@ -29,12 +29,12 @@ export class TodosService {
   }
 
   async getAllTodobyUser(user: Users) {
-    // const userdetail = await this.usersService.getUserByEmail(user.email);
-    // const userId = userdetail.id;
+    const userdetail = await this.usersService.getUserByEmail(user.email);
+    const userId = userdetail.id;
 
     const todoListthis = await this.todoRepository.find({
-      where: { userId: user.id },
-      relations: { users: true },
+      where: { userId: userId },
+      // relations: { users: true },
     });
     return todoListthis;
   }

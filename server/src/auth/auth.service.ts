@@ -27,13 +27,16 @@ export class AuthService {
           password: true,
         },
       });
+      console.log('run to here--------------------------------------->');
+
       if (!user) {
-        throw new BadRequestException('Email or password is incorrect');
+        throw new BadRequestException('Email or password is incorrects');
       }
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        throw new BadRequestException('Email or password is incorrect');
+        throw new BadRequestException('Email or password is incorrectaasaasa');
       }
+
       // create access_token
       const payload = {
         email: user.email,
@@ -42,10 +45,11 @@ export class AuthService {
       const access_token = await this.jwtService.signAsync(payload, {
         secret: process.env.JWT_SECRET,
       });
+
       delete user.password;
       return { ...user, access_token: access_token };
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
 

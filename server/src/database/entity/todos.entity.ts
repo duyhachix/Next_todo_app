@@ -24,6 +24,7 @@ export class Todos {
 
   @Column({
     nullable: false,
+    default: 'not done',
   })
   status: string;
 
