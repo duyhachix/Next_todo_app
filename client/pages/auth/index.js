@@ -34,6 +34,8 @@ export default function Home() {
 			let loggedUser = response.data.authUser;
 			if (!loggedUser) return;
 			else {
+				let token = loggedUser.access_token;
+				let localToken = localStorage.setItem('local_token', token);
 				let user = response.data.authUser;
 				setUser(user);
 				toast.success(response.data?.message, {
