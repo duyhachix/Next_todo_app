@@ -99,7 +99,9 @@ export default function Todo() {
 	 * TODO: delete todo item
 	 * @param {*} itemId : id of the item
 	 */
-	async function handleDeleteTodo(itemId) {
+	async function handleDeleteTodo(e, itemId) {
+		e.stopPropagation();
+
 		let token = getTokenFromLocalStorage();
 		try {
 			let response = await axios.delete(
@@ -252,7 +254,7 @@ export default function Todo() {
 										<td>
 											<FcCancel
 												className="cursor-pointer hover:scale-125 ml-1 m-auto"
-												onClick={() => handleDeleteTodo(item.id)}
+												onClick={(e) => handleDeleteTodo(e, item.id)}
 											></FcCancel>
 										</td>
 									</tr>

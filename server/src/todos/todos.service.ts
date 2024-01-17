@@ -29,31 +29,21 @@ export class TodosService {
   }
 
   async getAllTodobyUser(user: Users) {
-    const userdetail = await this.usersService.getUserByEmail(user.email);
-    const userId = userdetail.id;
-
     const todoListthis = await this.todoRepository.find({
-      where: { userId: userId },
-      // relations: { users: true },
+      where: { users: { email: user.email } },
+      relations: { users: true },
     });
     return todoListthis;
   }
 
   async updateTodo(user: Users, updateTodoDto: any, id: number) {
-    const userdetail = await this.usersService.getUserByEmail(user.email);
-    const userId = userdetail.id;
-
     const todo = await this.todoRepository.findOne({
-      where: { userId: userId, id: id },
+      where: { users: { email: user.email }, id: id },
     });
 
     if (!todo) {
       throw new NotFoundException('Todo not found');
     }
-    // update new value
-    // todo.title = updateTodoDto.title;
-    // todo.description = updateTodoDto.description;
-    // todo.status = updateTodoDto.status;
 
     return await this.todoRepository.save({
       ...todo,
